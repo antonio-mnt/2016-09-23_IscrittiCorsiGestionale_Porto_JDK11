@@ -13,6 +13,7 @@ import javafx.scene.control.TextArea;
 public class FXMLController {
 	
 	private Model model;
+	private boolean flag = false;
 
     @FXML
     private ResourceBundle resources;
@@ -25,11 +26,39 @@ public class FXMLController {
 
     @FXML
     void doCorsiFrequentati(ActionEvent event) {
+    	
+    	this.model.creaGrafo();
+    	
+    	this.txtResult.setText("Grafo creato!\n#Vertici: "+this.model.getNumeroVertici()+"\n#Archi: "+this.model.getNumeroArchi()+"\n");
+    	
+    	this.model.calcolaFrequenza();
+    	
+    	for(Integer i: this.model.getFrequenza().keySet()) {
+    		this.txtResult.appendText("Studenti iscritti a "+i+" corsi: "+this.model.getFrequenza().get(i)+"\n");
+    	}
+    	
+    	this.flag = true;
+
 
     }
 
     @FXML
     void doVisualizzaCorsi(ActionEvent event) {
+    	
+    	
+    	if(flag == false) {
+    		this.txtResult.setText("Creare prima il grafo");
+    		return;
+    	}
+    	
+    	this.model.trovaInsieme();
+    	
+    	if(this.model.getBest()==null) {
+    		this.txtResult.setText("Non esiste un insieme minimo");
+    		return;
+    	}
+    	
+    	this.txtResult.setText(this.model.getBest().toString());
 
     }
 
